@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+# 替换Code OSS插件商店链接为VSCode官方商店链接
+
+echo
+echo "set serviceUrl"
+sudo sed -i '/.*"serviceUrl":*/c\"serviceUrl": "https://marketplace.visualstudio.com/_apis/public/gallery",' "/usr/lib/code/product.json"
+
+echo
+echo "set itemUrl"
+sudo sed -i '/.*"itemUrl":*/c\"itemUrl": "https://marketplace.visualstudio.com/items"' "/usr/lib/code/product.json"
+
+echo
+echo "grep Url /usr/lib/code/product.json"
+grep "Url" "/usr/lib/code/product.json"

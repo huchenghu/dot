@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+
+# 更新当前目录的.gitignore
+# 截取当前.gitignore中[custom]关键字以下的部分到新.gitignore
+
+# preconditions
+#   dotfiles
+
+DOTFILES_CONFIG_DIR="${HOME}/dotfiles/devel/gitignore"
+
+echoinfo() { echo -e "\e[32m[INFO]\e[0m $1"; }
+echowarning() { echo -e "\e[33m[WARNING]\e[0m $1" >&2; }
+echoerror() { echo -e "\e[31m[ERROR]\e[0m $1" >&2; }
+
+backup_file() {
+  local file=$1
+  if [[ -e $file ]]; then
+    local timestamp=$(date +%Y%m%d%H%M%S)
+    mv -v "$file" "${file}.${timestamp}.bak"
+  fi
+}
+
+deploy_config() {
+  local action=$1  # deploy/clean
+  local source=$2
+  local target=$3
+  local backup="${target}.*.bak"
+
+  case $action in
+    deploy)
+      backup_file "$target"
+      cp -v "$source" "$target" || echoerror "failed to copy $source to $target"
+      chmod 600 "$target" || echoerror "failed to set permissions on $target"
+
+      local latest_backup=$(ls -1t $backup 2>/dev/null | head -1)
+      if [[ -n "$latest_backup" ]]; then
+        echoinfo "latest_backup: $(basename $latest_backup)"
+        if awk '/\[custom\]/ {i=1;next};i' "$latest_backup" >> "$target"; then
+          awk '/\[custom\]/ {i=1;next};i' "$latest_backup"
+        else
+          echowarning "failed to awk latest_backup [custom] to $target"
+        fi
+      else
+        echowarning "no latest_backup for $target"
+      fi
+      echo
+      ;;
+    clean)
+      rm -vf $backup || echoerror "failed to clean $backup"
+      ;;
+  esac
+}
+
+main() {
+  local action="deploy"
+
+  case $1 in
+    cpp)
+      deploy_config "$action" "$DOTFILES_CONFIG_DIR/cpp.gitignore" ".gitignore"
+      exit;;
+    qt)
+      deploy_config "$action" "$DOTFILES_CONFIG_DIR/qt.gitignore" ".gitignore"
+      exit;;
+    ue)
+      deploy_config "$action" "$DOTFILES_CONFIG_DIR/ue.gitignore" ".gitignore"
+      exit;;
+    *)
+      deploy_config "$action" "$DOTFILES_CONFIG_DIR/default.gitignore" ".gitignore"
+      exit;;
+  esac
+}
+
+main "$@"

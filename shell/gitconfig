@@ -1,0 +1,69 @@
+# ~/.gitconfig
+
+[user]
+name = git
+email = git@noreply.localhost
+
+[core]
+# 提交时转换CRLF为LF，签出时不转换
+autocrlf = input
+# 提交时转换CRLF为LF，签出时转换LF为CRLF
+#autocrlf = true
+# 是否记录文件执行权限
+fileMode = false
+# 是否区分大小写，默认区分，在FAT, NTFS等文件系统中默认不区分
+#ignorecase = false
+# 以转义字符显示异常字符，默认开启，但会转义中文，所以关闭
+quotePath = false
+# 默认为true，如果为false，符号链接将作为包含链接文本的小纯文件检出
+symlinks = true
+# 编辑器
+editor = vim
+
+[diff]
+tool = vimdiff
+
+[init]
+# main master trunk
+defaultBranch = main
+
+[gui]
+encoding = utf-8
+
+[i18n]
+commitEncoding = utf-8
+logOutputEncoding = utf-8
+
+[push]
+autoSetupRemote = true
+
+[alias]
+ad = add --all -v
+ba = branch --list --all
+bl = blame
+bs = bisect
+ca = commit --all -v
+cam = commit --amend
+cl = clean -diX # clean files and folders ignored
+cla = clean -dix # clean files and folders untracked
+co = checkout
+cs = commit -S # sign
+df = diff
+df1 = diff HEAD~1
+df2 = diff HEAD~2
+dfs = diff --staged # diff staged area and repo
+lg = log --graph --text --oneline
+lgs = log --graph --text --oneline --stat
+lga = log --graph --text --stat --all
+lgp = log --graph --text --patch
+pl = pull
+ps = push
+ref = reflog
+rv = remote -v
+sh = show
+st = status -bsvv
+sw = switch
+tg = tag
+tga = tag --annotate --
+tgl = tag --list
+web = instaweb --httpd=apache2

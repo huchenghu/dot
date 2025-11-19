@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+# --------------------------------------------------------------------------{{{
+
+i(){
+  if [ "$(id -u)" -ne 0 ]; then
+    # i love you
+    echo "Permission denied." >&2
+  else
+    # sudo i love you
+    echo "[805766400.004667] You should not run LOVED with privileges"
+    echo "[805766400.508000] fatal error: LOVED: No such person(0.0)"
+  fi
+}
+i
+
+# --------------------------------------------------------------------------}}}

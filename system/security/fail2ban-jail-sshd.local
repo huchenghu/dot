@@ -1,0 +1,30 @@
+# jail sshd
+
+# man jail.conf
+
+# Solu1
+# sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
+# sudo -e /etc/fail2ban/jail.local
+# Solu2
+# sudo cp /path/to/sshd-jail.local /etc/fail2ban/jail.d/sshd-jail.local
+
+# sudo fail2ban-client status sshd
+# sudo fail2ban-client set sshd banip 123.123.123.123
+# sudo fail2ban-client set sshd unbanip 123.123.123.123
+
+[DEFAULT]
+# fix backend
+# https://github.com/fail2ban/fail2ban/tree/master/config
+# https://github.com/fail2ban/fail2ban/issues/3292
+sshd_backend = systemd
+
+# 白名单
+#ignoreip = 127.0.0.1 10.0.0.0/8
+
+# 在findtime时间内尝试超过maxretry次数则封禁bantime时长
+findtime = 1d
+maxretry = 10
+bantime = 1w
+
+[sshd]
+enabled = true

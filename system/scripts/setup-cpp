@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+
+# setup c/c++ development environment
+
+detect_pkg_manager() {
+  if type brew &>/dev/null; then
+    echo "brew"
+  elif type apt &>/dev/null; then
+    echo "apt"
+  elif type pacman &>/dev/null; then
+    echo "pacman"
+  else
+    echo "Unsupported package manager" >&2
+    exit 1
+  fi
+}
+
+pkg_install() {
+  local pkg_manager=$(detect_pkg_manager)
+  local packages=("$@")
+
+  case $pkg_manager in
+    brew)
+      brew install "${packages[@]}"
+      ;;
+    apt)
+      sudo apt install -y "${packages[@]}"
+      ;;
+    pacman)
+      sudo pacman -S --needed --noconfirm "${packages[@]}"
+      ;;
+  esac
+}
+
+select_packages() {
+  local pkg_manager=$1
+  case $pkg_manager in
+    brew)
+      echo "gcc gdb make llvm cmake ninja boost"
+      ;;
+    apt)
+      echo "build-essential gcc gdb make clang clangd clang-format clang-tidy clang-tools lld lldb llvm cmake ninja-build libboost-all-dev"
+      ;;
+    pacman)
+      echo "base-devel gcc gdb make clang lld lldb llvm cmake ninja boost boost-libs"
+      ;;
+  esac
+}
+
+main() {
+  local pkg_manager=$(detect_pkg_manager)
+  local packages=$(select_packages "$pkg_manager")
+
+  pkg_install $packages
+}
+
+main "$@"
