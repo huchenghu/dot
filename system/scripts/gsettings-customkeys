@@ -1,0 +1,85 @@
+#!/bin/bash
+
+# 设置GNOME常用快捷键
+
+echo "大写锁定键作为<CTRL>键使用"
+gsettings set org.gnome.desktop.input-sources xkb-options "['ctrl:nocaps']"
+
+echo "截屏 <Alt/Shift><Super>s"
+gsettings set org.gnome.shell.keybindings screenshot "['<Alt><Super>s']"
+gsettings set org.gnome.shell.keybindings show-screenshot-ui "['<Shift><Super>s']"
+
+echo "切换应用程序 <Super>Tab，去除<Alt>Tab给切换窗口使用"
+gsettings set org.gnome.desktop.wm.keybindings switch-applications "['<Super>Tab']"
+gsettings set org.gnome.desktop.wm.keybindings switch-applications-backward "['<Shift><Super>Tab']"
+
+echo "切换窗口 <Alt>Tab"
+gsettings set org.gnome.desktop.wm.keybindings switch-windows "['<Alt>Tab']"
+gsettings set org.gnome.desktop.wm.keybindings switch-windows-backward "['<Shift><Alt>Tab']"
+
+echo "切换同一应用程序窗口 <Alt>Above_Tab，去除<Super>Above_Tab留作他用"
+gsettings set org.gnome.desktop.wm.keybindings switch-group "['<Alt>Above_Tab']"
+gsettings set org.gnome.desktop.wm.keybindings switch-group-backward "['<Shift><Alt>Above_Tab']"
+
+echo "显示桌面 <Super>d"
+gsettings set org.gnome.desktop.wm.keybindings show-desktop "['<Super>d']"
+
+echo "全屏 F11 <Super>Return"
+gsettings set org.gnome.desktop.wm.keybindings toggle-fullscreen "['<Super>Return']"
+
+echo "应用程序快捷键 <Control><Alt>[]"
+# 0Quake 1Terminal 2File 3Web 4Browser 5Note 6Editor 7Monitor 8Dictionary
+gcustomkeys="/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings"
+gsetcustomkeys="org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:$gcustomkeys"
+gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "[
+'$gcustomkeys/custom0/',
+'$gcustomkeys/custom1/',
+'$gcustomkeys/custom2/',
+'$gcustomkeys/custom3/',
+'$gcustomkeys/custom4/',
+'$gcustomkeys/custom5/',
+'$gcustomkeys/custom6/',
+'$gcustomkeys/custom7/',
+'$gcustomkeys/custom8/',
+'$gcustomkeys/custom9/'
+]"
+
+gsettings set $gsetcustomkeys/custom0/ name '0-Quake Terminal'
+gsettings set $gsetcustomkeys/custom0/ command ''
+gsettings set $gsetcustomkeys/custom0/ binding '<Super>Above_Tab'
+
+gsettings set $gsetcustomkeys/custom1/ name '1-Terminal'
+gsettings set $gsetcustomkeys/custom1/ command 'kitty'
+gsettings set $gsetcustomkeys/custom1/ binding '<Control><Alt>t'
+
+gsettings set $gsetcustomkeys/custom2/ name '2-Files'
+gsettings set $gsetcustomkeys/custom2/ command 'nautilus'
+gsettings set $gsetcustomkeys/custom2/ binding '<Control><Alt>f'
+
+gsettings set $gsetcustomkeys/custom3/ name '3-Web Browser default'
+gsettings set $gsetcustomkeys/custom3/ command 'firefox'
+gsettings set $gsetcustomkeys/custom3/ binding '<Control><Alt>w'
+
+gsettings set $gsetcustomkeys/custom4/ name '4-Editor'
+gsettings set $gsetcustomkeys/custom4/ command 'gnome-text-editor'
+gsettings set $gsetcustomkeys/custom4/ binding '<Control><Alt>e'
+
+gsettings set $gsetcustomkeys/custom5/ name '5-Remote Connections'
+gsettings set $gsetcustomkeys/custom5/ command 'gnome-connections'
+gsettings set $gsetcustomkeys/custom5/ binding '<Control><Alt>b'
+
+gsettings set $gsetcustomkeys/custom6/ name '6-Calculator'
+gsettings set $gsetcustomkeys/custom6/ command 'gnome-calculator'
+gsettings set $gsetcustomkeys/custom6/ binding '<Control><Alt>c'
+
+gsettings set $gsetcustomkeys/custom7/ name '7-Monitor'
+gsettings set $gsetcustomkeys/custom7/ command 'gnome-system-monitor'
+gsettings set $gsetcustomkeys/custom7/ binding '<Control><Alt>m'
+
+gsettings set $gsetcustomkeys/custom8/ name '8-Logs'
+gsettings set $gsetcustomkeys/custom8/ command 'gnome-logs'
+gsettings set $gsetcustomkeys/custom8/ binding '<Control><Alt>l'
+
+gsettings set $gsetcustomkeys/custom9/ name '9-Virt'
+gsettings set $gsetcustomkeys/custom9/ command 'gnome-boxes'
+gsettings set $gsetcustomkeys/custom9/ binding '<Control><Alt>v'

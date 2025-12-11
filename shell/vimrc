@@ -1,0 +1,648 @@
+" vimrc --------------------------------------------------------------------{{{
+
+" 这是一份无插件vim简易配置
+
+" <LEADER>是<Space>
+"
+" 写入        write               <LEADER>w
+" 退出        quit                <LEADER>q
+" 终端        terminal            <LEADER>`
+" 当前目录    current dir         <LEADER>.
+"
+" 分割窗口    split/vertically    <CTRL>w [s/v], <LEADER>s [h/j/k/l]
+" 切换窗口                        <CTRL>w [h/j/k/l]
+" 调整窗口                        <LEADER> [Left/Right/Up/Down]
+"
+" 比较文件    diff this           <LEADER>dt
+" 关闭比较    diff off            <LEADER>do
+" 接受不同    diff obtain         do
+" 推送不同    diff put            dp
+"
+" 缓冲区列表  buffer              <LEADER>bb
+" 下一缓冲区  buffer next         <LEADER>bn
+" 上一缓冲区  buffer previous     <LEADER>bp
+" 第9缓冲区   buffer num 9        :b9
+"
+" 标签页列表  tab                 <TAB>t
+" 新建标签页（当前路径）          <TAB>.
+" 新建标签页（当前文件）          <TAB>e
+" 下一标签页  tab next            <TAB>n
+" 上一标签页  tab previous        <TAB>p
+" 第9标签页   tab num 9           <TAB>9
+
+" debian vim config (/etc/vim/vimrc)
+"runtime! debian.vim
+"if filereadable("/etc/vim/vimrc.local")
+"  source /etc/vim/vimrc.local
+"endif
+
+" arch vim config (/etc/vimrc)
+"runtime! archlinux.vim
+
+" --------------------------------------------------------------------------}}}
+
+" base ---------------------------------------------------------------------{{{
+
+" unlet! skip_defaults_vim
+ru! defaults.vim                  " 使用defaults.vim
+set nomodeline                    " 禁用modeline
+set belloff=all                   " 禁用警报声音
+set novisualbell                  " 禁用警报闪屏
+set shortmess=atToOI              " 禁用开始界面
+let $LANG='C'                     " 设置语言
+
+" --------------------------------------------------------------------------}}}
+
+" file ---------------------------------------------------------------------{{{
+
+filetype plugin indent on         " 文本类型自动检测
+" 使用 `:e ++enc=utf-8 [filename]` 以指定编码打开文件
+" 使用 `:w ++enc=utf-8` 以指定编码写入文件
+" 使用 `:set fileformat=unix` 以指定文件<EOL>
+" 例如 `:e ++enc=big5 %` `:w ++enc=gbk`
+set encoding=utf-8
+set fileencodings=usc-bom,utf-8,default,utf-16,utf-16le,euc-cn,euc-tw,latin1
+set path+=**                      " 搜索路径
+
+" --------------------------------------------------------------------------}}}
+
+" highlight ----------------------------------------------------------------{{{
+
+" 在`VimEnter`时设置清除背景颜色，背景透明
+"autocmd VimEnter * hi Normal ctermbg=NONE guibg=NONE
+
+set t_Co=256
+colorscheme default               " 使用默认配色 默认背景透明
+set background=dark
+syntax on
+
+" --------------------------------------------------------------------------}}}
+
+" temporary files ----------------------------------------------------------{{{
+
+" archlinux.vim
+" Move temporary files to a secure location to protect against CVE-2017-1000382
+if exists('$XDG_CACHE_HOME')
+  let &g:directory=$XDG_CACHE_HOME
+else
+  let &g:directory=$HOME . '/.cache'
+endif
+let &g:undodir=&g:directory . '/vim/undo//'
+let &g:backupdir=&g:directory . '/vim/backup//'
+let &g:directory.='/vim/swap//'
+" Create directories if they doesn't exist
+if ! isdirectory(expand(&g:directory))
+  silent! call mkdir(expand(&g:directory), 'p', 0700)
+endif
+if ! isdirectory(expand(&g:backupdir))
+  silent! call mkdir(expand(&g:backupdir), 'p', 0700)
+endif
+if ! isdirectory(expand(&g:undodir))
+  silent! call mkdir(expand(&g:undodir), 'p', 0700)
+endif
+
+" --------------------------------------------------------------------------}}}
+
+" session ------------------------------------------------------------------{{{
+
+" :mksession [filename]           创建session文件
+" :source [filename]              加载session文件
+" :wviminfo [filename]            写入viminfo文件
+" :rviminfo [filename]            读取viminfo文件
+
+"set viminfofile=$HOME/.cache/vim/viminfo
+
+" :jumps                          跳转列表
+" <C-o>                           转到跳转列表中之前的位置或文件 older position
+" <C-i>                           转到跳转列表中之后的位置或文件
+" gi                              转到之前插入的位置 go insert
+" :clearjumps                     清空跳转列表
+
+" sessionoptions                  默认: blank,buffers,curdir,folds,
+"                                 help,options,tabpages,winsize,terminal
+"set sessionoptions-=curdir       " the current directory
+"set sessionoptions+=sesdir       " session file located directory
+set sessionoptions+=slash         " \ --> /
+set sessionoptions+=unix          " Unix end-of-line format
+
+" --------------------------------------------------------------------------}}}
+
+" read&save ----------------------------------------------------------------{{{
+
+cmap w!! w !sudo tee >/dev/null %
+set autoread                      " 自动读取
+set autowrite                     " 自动保存
+set autochdir                     " 自动切换目录
+set confirm                       " 使用字符确认，不使用弹窗确认
+set noswapfile                    " 禁用swapfile，大文件性能不佳
+set writebackup                   " 在写入文件前备份
+set undofile                      " 重做历史，默认关闭
+set backup                        " 备份文件，默认关闭
+
+" --------------------------------------------------------------------------}}}
+
+" clipboard ----------------------------------------------------------------{{{
+
+set clipboard^=unnamed            " 剪切板
+
+" --------------------------------------------------------------------------}}}
+
+" indent&space -------------------------------------------------------------{{{
+
+" Tabs are 8 characters, and thus indentations are also 8 characters.
+" There are heretic movements that try to make indentations 4 (or even 2!)
+" characters deep,
+" and that is akin to trying to define the value of PI to be 3.
+" 制表符是 8 个字符，所以缩进也是 8 个字符。
+" 有些异端运动试图将缩进变为 4 (甚至 2！) 字符深，
+" 这几乎相当于尝试将圆周率的值定义为 3。
+"                                   --- Linux kernel coding style
+
+" 本配置多用于编辑配置文件，使用2空格缩进
+set autoindent                    " 自动缩进，默认关闭
+set smartindent                   " 根据文件类型智能缩进
+set shiftwidth=2                  " 自动缩进时<Space>的数量，默认8
+set tabstop=2                     " 显示时一个<Tab>代表的<Space>数量，默认8
+set softtabstop=2                 " 编辑时一个<Tab>代表的<Space>数量，默认8
+set expandtab                     " 使用`CTRL-V<Tab>`插入真正的<Tab>
+"set noexpandtab                  " 使用`:%retab!`转化<Tab>和<Space>
+set smarttab                      " 智能<Tab>，默认关闭
+set list                          " 显式显示<Tab>, <Space>等
+set listchars=tab:>-,trail:-,extends:>,precedes:<,nbsp:+  ",space:.,eol:$
+
+" --------------------------------------------------------------------------}}}
+
+" line ---------------------------------------------------------------------{{{
+
+"set cursorline
+set number                        " 行号
+"set relativenumber               " 相对当前行行号
+"set signcolumn=yes               " 标志栏，默认自动
+set wrap                          " 折行，默认开启
+set textwidth=0                   " 文本宽度，输入时超宽自动折行，默认0关闭
+set nolinebreak                   " 按空格分单词折行，中文不适用
+set scrolloff=5                   " 滚动余量5/999
+set colorcolumn=80                " 高亮竖列80/120
+"set breakat+="！；：。，？"
+"set breakindent                  " 折行后缩进
+
+" --------------------------------------------------------------------------}}}
+
+" completion ---------------------------------------------------------------{{{
+
+" <Tab>                           唤起补全
+" CTRL-P/CTRL-N                   选择上一个/下一个补全 previous/next
+set wildmenu                      " 增强补全菜单
+set wildmode=list:longest,longest:full
+set wildignore+=*.o,*.obj,*.~,*.pyc
+set wildignore+=*/.git/*,*/.svn/*
+set showmatch                     " 显示匹配的括号
+set matchpairs+=<:>
+set matchpairs+==:;               " au Filetype c,cpp,java
+"set complete-=i                  " 不在当前及包含的目录下扫描文件
+"set completeopt=menu,popup       " 默认menu,preview
+" :h ins-completion
+" i_CTRL-X_CTRL-L                 补全整行 line
+" i_CTRL-X_CTRL-N                 补全当前文件的关键词 now
+" i_CTRL-X_CTRL-K                 补全字典内的关键词 key
+" i_CTRL-X_CTRL-I                 补全当前及包含目录下文件的关键词 include
+" i_CTRL-X_CTRL-]                 补全tags
+" i_CTRL-X_CTRL-F                 补全文件名和路径 file path
+" i_CTRL-X_CTRL-D                 补全定义及宏 definitions or macros
+" etc.
+
+" --------------------------------------------------------------------------}}}
+
+" search -------------------------------------------------------------------{{{
+
+set hlsearch                      " 高亮搜索结果 :nohlsearch清除
+set incsearch                     " 在输入时搜索
+set ignorecase                    " 搜索时忽略大小写，默认关闭
+set smartcase                     " 输入时含大写则匹配大小写，默认关闭
+
+" --------------------------------------------------------------------------}}}
+
+" tabline ------------------------------------------------------------------{{{
+
+" 自定义TabLine [1][file name]
+
+" List all the tab pages labels
+function! CustomTabLine()
+  let s = ''
+  for i in range(tabpagenr('$'))
+    " select the highlighting
+    if i + 1 == tabpagenr()
+      let s .= '%#TabLineSel#'
+    else
+      let s .= '%#TabLine#'
+    endif
+    " set the tab page number
+    let s .= '[' . (i + 1) . ']'
+    " the label is made by CustomTabLabel()
+    let s .= '[' . '%{CustomTabLabel(' . (i + 1) . ')}' . '] '
+    "if (i+1) < tabpagenr('$')
+    "  let s .= ' | '
+    "endif
+  endfor
+  " after the last tab fill with TabLineFill and reset tab page nr
+  let s .= '%#TabLineFill#%T'
+  " right-align the label to close the current tab page
+  if tabpagenr('$') > 1
+    let s .= '%=%#TabLine#%999Xclose'
+  endif
+  return s
+endfunction
+
+" Get each tab page label
+function! CustomTabLabel(n)
+  let buflist = tabpagebuflist(a:n)
+  let winnr = tabpagewinnr(a:n)
+  let tailfname = fnamemodify(bufname(buflist[winnr - 1]), ':t')
+  return empty(tailfname) ? '[No Name]' : tailfname
+endfunction
+
+" TabLine
+"set showtabline=2                " 一直显示tabline，没有必要
+set tabline=%!CustomTabLine()
+" :tabs                           列出标签页
+" {count}gt                       前往标签页 go to tab {count}
+" :tabp                           前一个标签页 tab previous
+" :tabn                           后一个标签页 tab next
+" :tabm [N]                       移动当前标签页到[N]之后 move N
+" :[range]tabd {cmd}              在标签页执行{cmd}命令
+
+" --------------------------------------------------------------------------}}}
+
+" git info -----------------------------------------------------------------{{{
+
+" 显示基本git信息 [main][+]       可能拖慢速度，禁用
+
+"function! GitInfo()
+"  if exists("g:git_branch") && exists("g:git_status")
+"    return g:git_branch . g:git_status
+"  else
+"    return ''
+"  endif
+"endfunction
+"function! GetGitInfo()
+"  try
+"    let l:is_git_dir = system('bash -c "echo -n \"$(git rev-parse --is-inside-work-tree 2>/dev/null)\"')
+"    let g:git_branch = l:is_git_dir == 'true' ?
+"          \ system('bash -c "echo -n \"[$(git rev-parse --abbrev-ref HEAD 2>/dev/null)]\"') : ''
+"    let g:git_status = l:is_git_dir == 'true' ?
+"          \ system('bash -c "[[ -n \"$(git status --porcelain 2>/dev/null)\" ]] && echo -n \"[+]\"') : ''
+"  catch
+"    " Not allowed in restricted-mode
+"    echo "Error:" . v:exception
+"  endtry
+"endfunction
+
+" . shellescape(expand("%")) . "
+"autocmd BufEnter,FocusGained,BufWritePost * call GetGitInfo()
+
+" --------------------------------------------------------------------------}}}
+
+" indent info --------------------------------------------------------------{{{
+
+" 缩进信息 [SPC:2]
+
+function! IndentInfo()
+  if &expandtab
+    return 'SPC:' . shiftwidth()
+  else
+    return 'TAB:' . shiftwidth()
+  endif
+endfunction
+
+" --------------------------------------------------------------------------}}}
+
+" statusline ---------------------------------------------------------------{{{
+
+" 状态栏
+" [1][i] [vimrc][+] [vim][unix][utf-8] [00:00 70-01-01] ... [SPC:2] ["] [0 0x0] [328 87 43%]
+
+set laststatus=2                  " 总是显示状态栏
+set showcmd                       " 显示命令
+set showmode                      " 显示信息
+set ruler                         " 显示光标位置
+set statusline=%#Start#%<
+set statusline+=%#BufferNumber#[%n]
+set statusline+=%#Mode#[%{mode()}]
+set statusline+=%#FileName#\ [%t]%h%m%r%w
+set statusline+=%#FileType#\ %y
+set statusline+=%#FileFormat#[%{&ff}]
+set statusline+=%#FileEncoding#[%{&fenc!=''?&fenc:&enc}]
+set statusline+=%#ModifiedTime#\ [%{strftime(\"%H:%M\ %y-%m-%d\",getftime(expand(\"%:p\")))}]
+set statusline+=%#Separation#%=
+"set statusline+=%#GitInfo#\ %{GitInfo()}
+set statusline+=%#IndentInfo#\ [%{IndentInfo()}]
+"set statusline+=%#Spelllang#\ [%{&spelllang}]
+"set statusline+=%#Hls#\ [%{&hls}]
+set statusline+=%#Register#\ [%{v:register}]
+set statusline+=%#ByteValue#\ [%b\ 0x%B]
+set statusline+=%#LocationPercentage#\ [%l\ %c%V\ %P]
+
+" 清除statusline背景色 (fg is bg, bg is fg)
+"hi StatusLine ctermfg=NONE guifg=NONE
+"hi StatusLineNC ctermfg=NONE guifg=NONE
+
+" --------------------------------------------------------------------------}}}
+
+" fold ---------------------------------------------------------------------{{{
+
+set foldmethod=marker             " manual/indent/expr/marker/syntax/diff
+set nofoldenable                  " 是否折叠，默认开启
+" z像一个折叠的文件
+" zf/zF       创建折叠/递归创建折叠 fold [recursively]
+" zd/zD       删除折叠/递归删除折叠 delete fold [recursively]
+" zo/zO       打开折叠/递归打开所有折叠 open one/all folds
+" zc/zC       关闭折叠/递归关闭所有折叠 close one/all folds
+" za/zA       切换折叠状态/递归切换折叠状态 auto
+" zv          查看光标行 view cursor line
+" zx/zX       更新折叠 :h zx
+" zm/zM       折叠更多 fold more/all
+" zr/zR       折叠更少 reduce folding/all
+" zn/zN       不折叠/正常折叠 fold none/normal
+" zi          反转折叠选项 invert 'foldenable'
+" [z/]z       移动到当前折叠的开始/结尾
+" zj/zk       移动到下一个折叠的开始/上一个折叠的结尾
+
+" 更多z开头的快捷键，但和fold无关
+" zt          在顶端重绘当前行 redraw line at top of window
+" zb          在底部重绘当前行 redraw line at bottom of window
+" zz          在中间重绘当前行 redraw line at center of window
+" z<Left>     移动可视区域到左侧，折行禁用时可用
+" z<Right>    移动可视区域到右侧，折行禁用时可用
+
+" --------------------------------------------------------------------------}}}
+
+" comment ------------------------------------------------------------------{{{
+
+" 注释: V {j k} <C-v> I {// # "}
+" 取消注释: <C-v> {h j k l} {d x}
+
+" --------------------------------------------------------------------------}}}
+
+" markdown -----------------------------------------------------------------{{{
+
+"set conceallevel=0               " 没用？
+let g:markdown_fenced_languages = ['c', 'cpp', 'python', 'sh', 'vim']
+
+" --------------------------------------------------------------------------}}}
+
+" netrw --------------------------------------------------------------------{{{
+
+" :Lexplore                       在左侧打开文件目录
+" :Texplore                       在标签页打开文件目录
+" t                               Netrw中，在新标签页打开文件
+
+" 书签
+" mb          mark bookmark       :NetrwMB [files/dirs]
+" qb          query bookmark
+" {cnt}gb     go to bookmark
+" {cnt}mB     delete bookmark     :NetrwMB! [files/dirs]
+" u           到前一个目录
+" U           到后一个目录
+
+let g:netrw_winsize=20            " 20% width
+" <i> 切换目录样式 liststyle 0-thin/1-long/2-wide/3-tree
+let g:netrw_liststyle=3
+
+" --------------------------------------------------------------------------}}}
+
+" print --------------------------------------------------------------------{{{
+
+" 使用`:TOhtml` + `firefox`打印
+
+" --------------------------------------------------------------------------}}}
+
+" regular expressions ------------------------------------------------------{{{
+
+set magic                         " 默认开启，不要关闭
+
+" 查找替换
+" :s/old/new                      替换第一处
+" :s/old/new/g                    在当前行内替换 global
+" :s/old/new/gc                   在当前行内替换并确认 global confirm
+" :%s/old/new/g                   在当前文件替换
+" :m,ns/old/new/g                 在m到n行替换
+" :'<, '>s/old/new/g              在选中区域替换
+
+" 一些例子
+" :%s/\s\+$//                     全文清除多余空格 clear whitespace
+" :s/\v<(.)(\w*)/\u\1\L\2/g       首字母大写
+" :s#^#//#g                       #注释
+" :s#^//##g                       取消#注释
+
+" --------------------------------------------------------------------------}}}
+
+" map ----------------------------------------------------------------------{{{
+
+" insert mode move hjkl <C-hjkl> -------------------------------------------{{{
+
+" 插入模式移动
+inoremap <C-h> <left>
+inoremap <C-j> <down>
+inoremap <C-k> <up>
+inoremap <C-l> <right>
+
+" --------------------------------------------------------------------------}}}
+
+" command-line mode move <C-aefb> ------------------------------------------{{{
+
+" 命令行移动
+cnoremap <C-a> <Home>
+cnoremap <C-e> <End>
+cnoremap <C-f> <Left>
+cnoremap <C-b> <Right>
+
+" --------------------------------------------------------------------------}}}
+
+" tab <Tab> ----------------------------------------------------------------{{{
+
+noremap <Tab>t :tabs<CR>
+noremap <Tab>. :Texplore<CR>
+noremap <Tab>c :tabclose<CR>
+noremap <Tab>e :tabedit %<CR>
+noremap <Tab>n :tabnext<CR>
+noremap <Tab>p :tabprevious<CR>
+noremap <Tab>f :tabfirst<CR>
+noremap <Tab>l :tablast<CR>
+noremap <Tab>0 :tabonly<CR>
+" 1gt
+noremap <Tab>1 1gt
+noremap <Tab>2 2gt
+noremap <Tab>3 3gt
+noremap <Tab>4 4gt
+noremap <Tab>5 5gt
+noremap <Tab>6 6gt
+noremap <Tab>7 7gt
+noremap <Tab>8 8gt
+noremap <Tab>9 9gt
+
+" --------------------------------------------------------------------------}}}
+
+" map leader
+let mapleader="\<Space>"
+
+" save&quit&open&read <LEADER>qwert ----------------------------------------{{{
+
+" noremap: no recursion map
+noremap <LEADER>q :q<CR>
+noremap <LEADER>w :w<CR>
+noremap <LEADER>e :e
+noremap <LEADER>r :r
+noremap <LEADER>t :tabe
+noremap <LEADER>` :terminal<CR>
+noremap <LEADER>. :e .<CR>
+
+" --------------------------------------------------------------------------}}}
+
+" terminal normalmode/hide/(bash shortcut <C-d>) ---------------------------{{{
+
+" 在terminal mode中如果使用空格<LEADER>键，效果会很显著XD
+"tnoremap <ESC><ESC> <C-\><C-n>
+"tnoremap <ESC><C-c> <C-w><C-c>
+"tnoremap <ESC><C-h> <C-w>:hide<CR>
+"tnoremap <ESC><C-d> <C-w>:quit!<CR>
+
+" --------------------------------------------------------------------------}}}
+
+" search <LEADER> ----------------------------------------------------------{{{
+
+noremap <LEADER>= nzz
+noremap <LEADER>- Nzz
+
+" file indent
+"noremap <LEADER>= gg=G
+
+" --------------------------------------------------------------------------}}}
+
+" ctrl <LEADER>c -----------------------------------------------------------{{{
+
+" <C-c/v> --> <<LEADER>c-c/v>
+noremap <LEADER>cc "+y
+noremap <LEADER>cx "+x
+noremap <LEADER>cv "+p
+noremap <LEADER>ca ggVG
+
+" --------------------------------------------------------------------------}}}
+
+" no <LEADER>n -------------------------------------------------------------{{{
+
+" no highlight
+noremap <LEADER>nh :nohlsearch<CR>
+
+" no background
+noremap <LEADER>nb :hi Normal ctermbg=NONE guibg=NONE<CR>
+
+" no whitespace CTRL-M/^M
+noremap <LEADER>nw :%s/\s\+$//g<CR>
+noremap <LEADER>nm :%s/<C-v><C-m>\+$//g<CR>
+
+" --------------------------------------------------------------------------}}}
+
+" split windows hjkl <LEADER>s ---------------------------------------------{{{
+
+noremap <LEADER>sh :set nosplitright<CR>:vsplit<CR>
+noremap <LEADER>sj :set splitbelow<CR>:split<CR>
+noremap <LEADER>sk :set nosplitbelow<CR>:split<CR>
+noremap <LEADER>sl :set splitright<CR>:vsplit<CR>
+" move to windows <CTRL-w>hjkl
+
+" --------------------------------------------------------------------------}}}
+
+" resize windows -----------------------------------------------------------{{{
+
+noremap <LEADER><Left> <C-w>5>
+noremap <LEADER><Right> <C-w>5<
+noremap <LEADER><Up> <C-w>2-
+noremap <LEADER><Down> <C-w>2+
+
+" --------------------------------------------------------------------------}}}
+
+" diff <LEADER>d -----------------------------------------------------------{{{
+
+" do diff obtain
+" dp diff put
+noremap <LEADER>dt :diffthis<CR>
+noremap <LEADER>do :diffoff<CR>
+
+" --------------------------------------------------------------------------}}}
+
+" buffer <LEADER>b ---------------------------------------------------------{{{
+
+noremap <LEADER>bb :buffers<CR>
+noremap <LEADER>bd :bdelete<CR>
+noremap <LEADER>bn :bnext<CR>
+noremap <LEADER>bp :bprevious<CR>
+noremap <LEADER>bf :bfirst<CR>
+noremap <LEADER>bl :blast<CR>
+" :b1
+" buffer编号不是连续数字
+
+" --------------------------------------------------------------------------}}}
+
+" file <LEADER>f -----------------------------------------------------------{{{
+
+" format
+noremap <LEADER>fc :py3file /usr/share/clang/clang-format.py<CR>
+"function! FormatOnSave()
+"  "let l:formatdiff = 1
+"  %py3file /usr/share/clang/clang-format.py
+"endfunction
+"autocmd BufWritePre *.h,*.hpp,*.c,*.cc,*.cpp call FormatOnSave()
+
+" --------------------------------------------------------------------------}}}
+
+" go to <LEADER>g ----------------------------------------------------------{{{
+
+" <C-]> 跳转到定义
+
+" <C-o> go to older pos in change list :changes
+"noremap <LEADER>g; g;
+
+" <C-i> go to newer pos in change list :changes
+"noremap <LEADER>g, g,
+
+" go to local declaration definition
+"noremap <LEADER>gd gd
+
+" go to global declaration
+"noremap <LEADER>gD gD
+
+" go to implementations
+"noremap <LEADER>gi
+
+" go to references
+"noremap <LEADER>gr
+
+" 谜题`:u t?`
+
+" --------------------------------------------------------------------------}}}
+
+" --------------------------------------------------------------------------}}}
+
+" GUI ----------------------------------------------------------------------{{{
+
+if has("gui_running")
+  set guioptions-=e               " 标签栏        tabline
+  set guioptions-=m               " 菜单栏        menu
+  set guioptions-=T               " 工具栏        Toolsbar
+  set guioptions-=r               " 右滚动条      right-hand scrollbar
+  set guioptions-=L               " 左滚动条      Left-hand scrollbar
+  set guioptions+=!               " 终端窗口      terminal
+  set guioptions+=c               " 终端对话框    console dialog
+  set guioptions+=P               " 寄存器        autoselect, use register "+
+  set guifont=Monospace\ 16       " 图形界面字体
+  set guifontwide=Monospace\ 16   " 图形界面宽字体
+  "set guifont=Sarasa\ Mono\ SC:h16
+  "set guifontwide=Sarasa\ Mono\ SC:h16
+  set columns=90                  " 默认80列或终端列数
+  set lines=30                    " 默认30行或终端行数
+  "set iminsert=2
+  "colorscheme wildcharm
+  "set background=dark
+endif
+
+" --------------------------------------------------------------------------}}}

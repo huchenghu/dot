@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+
+# 复制本仓库公开部分到新目录，重新初始化仓库并推送
+# 公开前请确认排除项！
+
+workdir_basename="dotfiles"
+github_reponame="dot"
+
+# 检查当前目录是否以$workdir_basename开头
+current_dir=$(basename "$(pwd)")
+if [[ ! "$current_dir" =~ ^"$workdir_basename" ]]; then
+    echo
+    echo -e >&2 "\n\e[31m[ERROR]\e[0m: basename ERROR!\n"
+    echo "expected directory prefix: $workdir_basename"
+    echo "current directory: $current_dir"
+    exit 1
+fi
+
+pubdir="$(pwd)/../$workdir_basename-public"
+echo "$pubdir"
+if [[ -d "$pubdir" ]]; then
+  echo "rm -rf $pubdir"
+  rm -rf "$pubdir"
+fi
+mkdir -pv "$pubdir"
+
+rsync -ac --exclude='backup' --exclude='**/clash' --exclude='**/surge' --exclude='**/bookmarks.json' --delete ./ "$pubdir/"
+
+echo
+cd "$pubdir" || exit
+if [[ -d ".git" ]]; then
+  echo "rm -rf .git"
+  rm -rf ".git"
+fi
+git init
+git config user.name git
+git config user.email git@noreply.localhost
+git add --all
+git commit --all -m "."
+git remote add github github-https:huchenghu/$github_reponame
+
+echo
+read -rp "git push github main -f? <Y/n> " prompt
+if [[ "$prompt" == "y" || "$prompt" == "Y" || "$prompt" == "" ]]; then
+  git push github main -f
+fi
+
+echo
+if [[ -d "$pubdir" ]]; then
+  echo "rm -rf $pubdir"
+  rm -rf "$pubdir"
+fi

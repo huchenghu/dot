@@ -1,0 +1,33 @@
+# [default]
+.*
+!.git*
+#/*
+
+# [UE]
+
+!/*.uproject
+!/Config
+!/Content
+!/Source
+
+# use git-lfs to manage raw content
+!/RawContent
+
+# use git submodules to manage plugins
+# each plugin has its own .gitignore
+!/Plugins
+!/*.uplugin
+
+# generated folders and files
+Build
+Binaries
+Collections
+Debug
+DerivedDataCache
+Developers
+Intermediate
+Saved
+*.code-workspace
+*.sln
+
+# [custom]

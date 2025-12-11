@@ -1,0 +1,5 @@
+" ~/.vimrc
+
+source $HOME/dotfiles/shell/vimrc
+
+" [custom]

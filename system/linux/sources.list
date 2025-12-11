@@ -1,0 +1,122 @@
+# debian mirrors -----------------------------------------------------------{{{
+
+# debian apt source.list(/etc/apt/sources.list)
+# 本地ISO镜像
+# debian官方分流
+# USTC镜像
+# TUNA镜像
+
+# 优先使用`release codename`，如`bullseye`，而不是`stable`
+# 本文件stable源中不包含`stable-proposed-updates`, `fasttrack`等
+# 本文件testing源中包含`testing-security`, 但其源可能为空
+# 所有源中包含源码`deb-src`，按需启用
+
+# --------------------------------------------------------------------------}}}
+
+# local ISO ----------------------------------------------------------------{{{
+
+# $ sudo mount -o loop /path/to/iso/ /media/iso/
+
+#deb [trusted=yes] file:///media/iso/ stable main contrib
+
+# --------------------------------------------------------------------------}}}
+
+# stable stable-security ---------------------------------------------------{{{
+
+#deb https://deb.debian.org/debian/ stable main contrib non-free non-free-firmware
+#deb https://deb.debian.org/debian/ stable-updates main contrib non-free non-free-firmware
+#deb https://deb.debian.org/debian/ stable-backports main contrib non-free non-free-firmware
+#deb https://deb.debian.org/debian-security/ stable-security main contrib non-free non-free-firmware
+
+#deb https://mirrors.ustc.edu.cn/debian/ stable main contrib non-free non-free-firmware
+#deb https://mirrors.ustc.edu.cn/debian/ stable-updates main contrib non-free non-free-firmware
+#deb https://mirrors.ustc.edu.cn/debian/ stable-backports main contrib non-free non-free-firmware
+#deb https://mirrors.ustc.edu.cn/debian-security/ stable-security main contrib non-free non-free-firmware
+
+#deb https://mirrors.tuna.tsinghua.edu.cn/debian/ stable main contrib non-free non-free-firmware
+#deb https://mirrors.tuna.tsinghua.edu.cn/debian/ stable-updates main contrib non-free non-free-firmware
+#deb https://mirrors.tuna.tsinghua.edu.cn/debian/ stable-backports main contrib non-free non-free-firmware
+#deb https://mirrors.tuna.tsinghua.edu.cn/debian-security/ stable-security main contrib non-free non-free-firmware
+
+#deb https://mirrors.nju.edu.cn/debian/ stable main contrib non-free non-free-firmware
+#deb https://mirrors.nju.edu.cn/debian/ stable-updates main contrib non-free non-free-firmware
+#deb https://mirrors.nju.edu.cn/debian/ stable-backports main contrib non-free non-free-firmware
+#deb https://mirrors.nju.edu.cn/debian-security/ stable-security main contrib non-free non-free-firmware
+
+#deb-src https://deb.debian.org/debian/ stable main contrib non-free non-free-firmware
+#deb-src https://deb.debian.org/debian/ stable-updates main contrib non-free non-free-firmware
+#deb-src https://deb.debian.org/debian/ stable-backports main contrib non-free non-free-firmware
+#deb-src https://deb.debian.org/debian-security/ stable-security main contrib non-free non-free-firmware
+
+#deb-src https://mirrors.ustc.edu.cn/debian/ stable main contrib non-free non-free-firmware
+#deb-src https://mirrors.ustc.edu.cn/debian/ stable-updates main contrib non-free non-free-firmware
+#deb-src https://mirrors.ustc.edu.cn/debian/ stable-backports main contrib non-free non-free-firmware
+#deb-src https://mirrors.ustc.edu.cn/debian-security/ stable-security main contrib non-free non-free-firmware
+
+#deb-src https://mirrors.tuna.tsinghua.edu.cn/debian/ stable main contrib non-free non-free-firmware
+#deb-src https://mirrors.tuna.tsinghua.edu.cn/debian/ stable-updates main contrib non-free non-free-firmware
+#deb-src https://mirrors.tuna.tsinghua.edu.cn/debian/ stable-backports main contrib non-free non-free-firmware
+#deb-src https://mirrors.tuna.tsinghua.edu.cn/debian-security/ stable-security main contrib non-free non-free-firmware
+
+#deb-src https://mirrors.nju.edu.cn/debian/ stable main contrib non-free non-free-firmware
+#deb-src https://mirrors.nju.edu.cn/debian/ stable-updates main contrib non-free non-free-firmware
+#deb-src https://mirrors.nju.edu.cn/debian/ stable-backports main contrib non-free non-free-firmware
+#deb-src https://mirrors.nju.edu.cn/debian-security/ stable-security main contrib non-free non-free-firmware
+
+# --------------------------------------------------------------------------}}}
+
+# testing testing-security -------------------------------------------------{{{
+
+#deb https://deb.debian.org/debian/ testing main contrib non-free non-free-firmware
+#deb https://deb.debian.org/debian/ testing-updates main contrib non-free non-free-firmware
+#deb https://deb.debian.org/debian-security/ testing-security main contrib non-free non-free-firmware
+
+#deb https://mirrors.ustc.edu.cn/debian/ testing main contrib non-free non-free-firmware
+#deb https://mirrors.ustc.edu.cn/debian/ testing-updates main contrib non-free non-free-firmware
+#deb https://mirrors.ustc.edu.cn/debian-security/ testing-security main contrib non-free non-free-firmware
+
+#deb https://mirrors.tuna.tsinghua.edu.cn/debian/ testing main contrib non-free non-free-firmware
+#deb https://mirrors.tuna.tsinghua.edu.cn/debian/ testing-updates main contrib non-free non-free-firmware
+#deb https://mirrors.tuna.tsinghua.edu.cn/debian-security/ testing-security main contrib non-free non-free-firmware
+
+#deb https://mirrors.nju.edu.cn/debian/ testing main contrib non-free non-free-firmware
+#deb https://mirrors.nju.edu.cn/debian/ testing-updates main contrib non-free non-free-firmware
+#deb https://mirrors.nju.edu.cn/debian-security/ testing-security main contrib non-free non-free-firmware
+
+#deb-src https://deb.debian.org/debian/ testing main contrib non-free non-free-firmware
+#deb-src https://deb.debian.org/debian/ testing-updates main contrib non-free non-free-firmware
+#deb-src https://deb.debian.org/debian-security/ testing-security main contrib non-free non-free-firmware
+
+#deb-src https://mirrors.ustc.edu.cn/debian/ testing main contrib non-free non-free-firmware
+#deb-src https://mirrors.ustc.edu.cn/debian/ testing-updates main contrib non-free non-free-firmware
+#deb-src https://mirrors.ustc.edu.cn/debian-security/ testing-security main contrib non-free non-free-firmware
+
+#deb-src https://mirrors.tuna.tsinghua.edu.cn/debian/ testing main contrib non-free non-free-firmware
+#deb-src https://mirrors.tuna.tsinghua.edu.cn/debian/ testing-updates main contrib non-free non-free-firmware
+#deb-src https://mirrors.tuna.tsinghua.edu.cn/debian-security/ testing-security main contrib non-free non-free-firmware
+
+#deb-src https://mirrors.nju.edu.cn/debian/ testing main contrib non-free non-free-firmware
+#deb-src https://mirrors.nju.edu.cn/debian/ testing-updates main contrib non-free non-free-firmware
+#deb-src https://mirrors.nju.edu.cn/debian-security/ testing-security main contrib non-free non-free-firmware
+
+# --------------------------------------------------------------------------}}}
+
+# unstable -----------------------------------------------------------------{{{
+
+#deb https://deb.debian.org/debian/ sid main contrib non-free non-free-firmware
+
+#deb https://mirrors.ustc.edu.cn/debian/ sid main contrib non-free non-free-firmware
+
+#deb https://mirrors.tuna.tsinghua.edu.cn/debian/ sid main contrib non-free non-free-firmware
+
+#deb https://mirrors.nju.edu.cn/debian/ sid main contrib non-free non-free-firmware
+
+#deb-src https://deb.debian.org/debian/ sid main contrib non-free non-free-firmware
+
+#deb-src https://mirrors.ustc.edu.cn/debian/ sid main contrib non-free non-free-firmware
+
+#deb-src https://mirrors.tuna.tsinghua.edu.cn/debian/ sid main contrib non-free non-free-firmware
+
+#deb-src https://mirrors.nju.edu.cn/debian/ sid main contrib non-free non-free-firmware
+
+# --------------------------------------------------------------------------}}}

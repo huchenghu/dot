@@ -1,0 +1,24 @@
+# ~/.ssh/config
+
+Host github
+  Hostname github.com
+  Port 22
+  User git
+  PreferredAuthentications publickey,password
+  IdentityFile ~/.ssh/github
+
+Host github-https
+  Hostname ssh.github.com
+  Port 443
+  User git
+  PreferredAuthentications publickey,password
+  IdentityFile ~/.ssh/github
+
+Host github-proxy
+  Hostname github.com
+  Port 22
+  User git
+  PreferredAuthentications publickey,password
+  IdentityFile ~/.ssh/github
+  # openbsd-netcat
+  ProxyCommand nc -x 127.0.0.1:1080 %h %p

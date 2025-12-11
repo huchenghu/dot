@@ -1,0 +1,27 @@
+{
+  "version": 5,
+  "lastUserContextId": 1,
+  "identities": [
+    {
+      "userContextId": 1,
+      "public": true,
+      "icon": "fingerprint",
+      "color": "blue",
+      "name": "个人"
+    },
+    {
+      "userContextId": 2,
+      "public": true,
+      "icon": "circle",
+      "color": "blue",
+      "name": "微信读书"
+    },
+    {
+      "userContextId": 3,
+      "public": true,
+      "icon": "briefcase",
+      "color": "toolbar",
+      "name": "豆瓣"
+    }
+  ]
+}

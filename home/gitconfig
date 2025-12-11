@@ -1,0 +1,6 @@
+# ~/.gitconfig
+
+[include]
+  path = ~/dotfiles/shell/gitconfig
+
+# [custom]
