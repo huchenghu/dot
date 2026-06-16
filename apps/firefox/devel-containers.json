@@ -1,0 +1,34 @@
+{
+  "version": 5,
+  "lastUserContextId": 1,
+  "identities": [
+    {
+      "userContextId": 1,
+      "public": true,
+      "icon": "vacation",
+      "color": "red",
+      "name": "Proxy"
+    },
+    {
+      "userContextId": 2,
+      "public": true,
+      "icon": "briefcase",
+      "color": "toolbar",
+      "name": "Github"
+    },
+    {
+      "userContextId": 3,
+      "public": true,
+      "icon": "circle",
+      "color": "blue",
+      "name": "DeepSeek"
+    },
+    {
+      "userContextId": 4,
+      "public": true,
+      "icon": "circle",
+      "color": "purple",
+      "name": "Qwen"
+    }
+  ]
+}

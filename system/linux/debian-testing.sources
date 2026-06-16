@@ -1,0 +1,41 @@
+# USTC testing testing-updates
+Types: deb
+URIs: https://mirrors.ustc.edu.cn/debian/
+Suites: testing testing-updates
+Components: main contrib non-free non-free-firmware
+Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
+
+# USTC testing-security
+Types: deb
+URIs: https://mirrors.ustc.edu.cn/debian-security/
+Suites: testing-security
+Components: main contrib non-free non-free-firmware
+Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
+
+# TUNA testing testing-updates
+Types: deb
+URIs: https://mirrors.tuna.tsinghua.edu.cn/debian/
+Suites: testing testing-updates
+Components: main contrib non-free non-free-firmware
+Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
+
+# TUNA testing-security
+Types: deb
+URIs: https://mirrors.tuna.tsinghua.edu.cn/debian-security/
+Suites: testing-security
+Components: main contrib non-free non-free-firmware
+Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
+
+# NJU testing testing-updates
+Types: deb
+URIs: https://mirrors.nju.edu.cn/debian/
+Suites: testing testing-updates
+Components: main contrib non-free non-free-firmware
+Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
+
+# NJU testing-security
+Types: deb
+URIs: https://mirrors.nju.edu.cn/debian-security/
+Suites: testing-security
+Components: main contrib non-free non-free-firmware
+Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg

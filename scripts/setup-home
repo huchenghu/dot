@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+
+# setup $HOME/.dotfiles
+
+# preconditions
+#   dotfiles
+
+DOTFILES_CONFIG_DIR="${HOME}/dotfiles/home"
+CONFIG_MAP=(
+  "bash.bashrc:.bashrc"
+  "zsh.zshrc:.zshrc"
+  "vimrc:.vimrc"
+  "sshconfig:.ssh/config"
+  "tmux.conf:.tmux.conf"
+  "gitconfig:.gitconfig"
+)
+
+backup_file() {
+  local file=$1
+  if [[ -e $file ]]; then
+    local timestamp=$(date +%Y%m%d%H%M%S)
+    mv -v "$file" "${file}.${timestamp}.bak"
+  fi
+}
+
+deploy_config() {
+  local action=$1  # deploy/clean
+  local source=$2
+  local target=$3
+  local backup="${target}.*.bak"
+
+  case $action in
+    deploy)
+      backup_file "$target"
+      cp -v "$source" "$target" || echo >&2 "failed to copy $source to $target"
+      chmod 600 "$target" || echo >&2 "failed to set permissions on $target"
+
+      local latest_backup=$(ls -1t $backup 2>/dev/null | head -1)
+      if [[ -n "$latest_backup" ]]; then
+        echo "latest_backup: $(basename $latest_backup)"
+        if awk '/\[custom\]/ {i=1;next};i' "$latest_backup" >> "$target"; then
+          awk '/\[custom\]/ {i=1;next};i' "$latest_backup"
+        else
+          echo "failed to awk latest_backup [custom] to $target"
+        fi
+      else
+        echo "no latest_backup for $target"
+      fi
+      echo
+      ;;
+    clean)
+      rm -vf $backup || echo >&2 "failed to clean $backup"
+      ;;
+  esac
+}
+
+main() {
+  local action=${1:-deploy}
+
+  for config in "${CONFIG_MAP[@]}"; do
+    deploy_config "$action" "$DOTFILES_CONFIG_DIR/${config%:*}" "$HOME/${config#*:}"
+  done
+
+  #echo "fc-cache -f"
+  #fc-cache -f
+  #echo "Monospace"
+  #fc-match -s monospace | head -n 2
+  #echo "Sans-Serif"
+  #fc-match -s sans-serif | head -n 2
+  #echo "Serif"
+  #fc-match -s serif | head -n 2
+}
+
+main "$@"

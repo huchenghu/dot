@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+# --------------------------------------------------------------------------{{{
+
+i(){
+  if [ "$(id -u)" -ne 0 ]; then
+    # i love you
+    echo "Permission denied." >&2
+  else
+    # sudo i love you
+    echo "[    0.508000] love: version magic '4.19.0' should be 'always'"
+    echo "[    0.508000] love: disagrees about version of symbol module_layout"
+    echo "[    0.666000] Kernel panic - not syncing: Attempted to love kernel!"
+    echo "[    0.666000] CPU: 0 PID: 1 Comm: love Not tainted"
+    echo "[    0.666000] Call Trace:"
+    echo "[    0.666000]  love_init+0x42/0x69"
+    echo "[    0.666000]  do_one_initcall+0x4a/0x1e0"
+    echo "[    0.666000] Kernel Offset: disabled"
+  fi
+}
+i
+
+# --------------------------------------------------------------------------}}}

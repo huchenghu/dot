@@ -1,0 +1,81 @@
+#!/bin/bash
+
+# 设置微调 gnome-tweaks dconf-editor
+# dconf dump / > dconf.conf
+# cat dconf.conf | dconf load -f /
+
+echo
+read -rp "重置所有gsettings? <y/N> " prompt
+if [[ "$prompt" == "y" || "$prompt" == "Y" ]]; then
+  gsettings list-schemas | xargs -n 1 gsettings reset-recursively
+fi
+
+echo "应用列表按字母排序"
+gsettings set org.gnome.shell app-picker-layout \[\]
+gsettings set org.gnome.desktop.app-folders folder-children \[\]
+
+#echo "亮色模式"
+#gsettings set org.gnome.desktop.interface color-scheme "prefer-light"
+
+#echo "光标主题 Adwaita"
+#gsettings set org.gnome.desktop.interface cursor-theme "Adwaita"
+#echo "图标主题 Adwaita"
+#gsettings set org.gnome.desktop.interface icon-theme "Adwaita"
+#echo "GTK主题 Adwaita"
+#gsettings set org.gnome.desktop.interface gtk-theme "Adwaita"
+
+#echo "界面字体 Sans 12"
+#gsettings set org.gnome.desktop.interface font-name "Sans 12"
+#echo "文档字体 Sans 16"
+#gsettings set org.gnome.desktop.interface document-font-name "Sans 16"
+#echo "等宽字体 Monospace 16"
+#gsettings set org.gnome.desktop.interface monospace-font-name "Monospace 16"
+
+echo "标题栏按钮 最小化 最大化 关闭"
+gsettings set org.gnome.desktop.wm.preferences button-layout "icon:minimize,maximize,close"
+echo "标题字体 Sans 12"
+gsettings set org.gnome.desktop.wm.preferences titlebar-font "Sans 12"
+echo "新窗口居中"
+gsettings set org.gnome.mutter center-new-windows true
+
+echo "输入法"
+gsettings set org.gnome.desktop.input-sources sources "[('xkb','us'),('ibus','libpinyin')]"
+echo "大写锁定键作为<CTRL>键使用"
+gsettings set org.gnome.desktop.input-sources xkb-options "['ctrl:nocaps']"
+
+echo "时钟格式 24h"
+gsettings set org.gnome.desktop.interface clock-format "24h"
+echo "时钟处显示日期"
+gsettings set org.gnome.desktop.interface clock-show-date true
+echo "时钟处显示秒数"
+gsettings set org.gnome.desktop.interface clock-show-seconds true
+echo "时钟处显示星期"
+gsettings set org.gnome.desktop.interface clock-show-weekday true
+echo "日历处显示周数"
+gsettings set org.gnome.desktop.calendar show-weekdate true
+
+echo "触控板 轻触点击"
+gsettings set org.gnome.desktop.peripherals.touchpad tap-to-click true
+
+echo "显示电池百分比"
+gsettings set org.gnome.desktop.interface show-battery-percentage true
+
+echo
+read -rp "禁用挂起(suspend)? <y/N> " prompt
+if [[ "$prompt" == "y" || "$prompt" == "Y" ]]; then
+  echo "接通AC电源时不挂起(suspend)"
+  gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-type "nothing"
+  echo "使用电池电源时不挂起(suspend)"
+  gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-battery-type "nothing"
+  #echo "电源键挂起(suspend)"
+  #gsettings set org.gnome.settings-daemon.plugins.power power-button-action "suspend" # "interactive"
+fi
+
+echo
+read -rp "禁用gnome-software自动下载及自动更新? <y/N> " prompt
+if [[ "$prompt" == "y" || "$prompt" == "Y" ]]; then
+  echo "禁用gnome-software自动下载及自动更新"
+  gsettings set org.gnome.software allow-updates false
+  gsettings set org.gnome.software download-updates false
+  gsettings set org.gnome.desktop.search-providers disable-external true
+fi
